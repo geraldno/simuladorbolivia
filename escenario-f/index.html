@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escenario F – Rumores y Pánico</title>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="scenario-page accent-f">
+  <div class="noise"></div>
+
+  <header class="scenario-header">
+    <a href="../index.html" class="back-btn">← Menú</a>
+    <h1>Rumores y Pánico en la Red de Distribución</h1>
+    <span class="scenario-label">Escenario F</span>
+  </header>
+
+  <main class="scenario-main">
+
+    <div class="info-box">
+      Un pequeño cambio en la información (rumor) puede generar un gran cambio en la demanda.
+      Se modela mediante un <strong>sistema lineal perturbado</strong>: <em>Ax = b → A(x+δx) = b+δb</em>.
+      El <strong>número de condición</strong> κ(A) mide cuán sensible es el sistema a los rumores.
+    </div>
+
+    <!-- EXPLICACIÓN DEL PROBLEMA -->
+    <p class="section-title">Problema Real</p>
+    <div class="explain-block">
+      <div class="explain-icon">📡</div>
+      <div class="explain-text">
+        <strong>Rumores y pánico: cómo la desinformación colapsa la red de distribución boliviana.</strong>
+        Durante la crisis de carburante, un rumor —"se acabó el diésel en la zona norte",
+        "van a subir los precios mañana"— desencadenaba colas masivas, compras de pánico y
+        una demanda repentina que multiplicaba el consumo real por 2 o 3 veces en cuestión
+        de horas. La red de distribución, modelada como un sistema lineal Ax = b, tiene una
+        <em>sensibilidad matemática</em> a estas perturbaciones medida por el número de
+        condición κ(A). Un sistema mal condicionado (κ alto) amplifica enormemente cualquier
+        pequeño error o perturbación en los datos de demanda, haciendo que la solución
+        —el plan de distribución— sea completamente diferente aunque el rumor haya sido mínimo.
+      </div>
+    </div>
+
+    <!-- EXPLICACIÓN DEL ALGORITMO -->
+    <p class="section-title">Algoritmos Utilizados</p>
+    <div class="algo-cards">
+
+      <div class="algo-card">
+        <div class="algo-name">Análisis de Perturbación Lineal</div>
+        <div class="algo-desc">
+          Dado el sistema Ax = b, si b se perturba en δb (el rumor), la nueva solución
+          satisface A(x+δx) = b+δb. El error relativo está acotado por:
+          ‖δx‖/‖x‖ ≤ κ(A)·‖δb‖/‖b‖, donde κ(A) = ‖A‖·‖A⁻¹‖.
+          Este análisis cuantifica cuánto se amplifica el rumor en la solución final.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Número de Condición κ(A)</div>
+        <div class="algo-desc">
+          Mide la sensibilidad intrínseca del sistema. κ = 1 es perfectamente estable;
+          κ = 10⁶ significa que un error del 0.0001% en los datos puede producir un
+          error del 100% en la solución. Se calcula como κ(A) = ‖A‖·‖A⁻¹‖ (usando
+          norma-2, la infinito o la de Frobenius). Un sistema mal condicionado requiere
+          mayor precisión aritmética o reformulación del problema.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Resolución con Eliminación Gaussiana</div>
+        <div class="algo-desc">
+          El sistema original y el perturbado se resuelven ambos por eliminación
+          gaussiana para obtener x y x+δx respectivamente. Comparando ambas soluciones
+          se cuantifica el impacto real del rumor en cada variable de distribución:
+          cuántas toneladas extra demanda cada zona por efecto del pánico.
+        </div>
+      </div>
+
+    </div>
+
+    <p class="section-title">Tipo de Rumor</p>
+    <div class="method-selector" id="methodSelector">
+      <button class="method-btn active" data-method="bajo">Rumor bajo</button>
+      <button class="method-btn" data-method="medio">Rumor medio</button>
+      <button class="method-btn" data-method="alto">Rumor alto</button>
+      <button class="method-btn" data-method="panico">Pánico de compra</button>
+      <button class="method-btn" data-method="stock">Reducción de stock</button>
+    </div>
+
+    <div class="input-panel">
+      <p class="section-title">Parámetros del sistema de distribución</p>
+      <div class="input-row">
+        <div class="input-group">
+          <label>Demanda base zona 1 (ton)</label>
+          <input type="number" id="d1" value="100"/>
+        </div>
+        <div class="input-group">
+          <label>Demanda base zona 2 (ton)</label>
+          <input type="number" id="d2" value="150"/>
+        </div>
+        <div class="input-group">
+          <label>Demanda base zona 3 (ton)</label>
+          <input type="number" id="d3" value="120"/>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>Perturbación manual δ (%)</label>
+          <input type="number" id="deltaPct" value="5" min="0" max="200" step="0.5"/>
+          <small style="color:var(--muted);font-size:0.65rem;">Ignorado si se elige tipo de rumor</small>
+        </div>
+        <div class="input-group">
+          <label>Condicionamiento del sistema</label>
+          <select id="condType">
+            <option value="bien">Bien condicionado</option>
+            <option value="moderado">Moderadamente mal</option>
+            <option value="mal">Mal condicionado</option>
+          </select>
+        </div>
+      </div>
+      <button class="run-btn" onclick="simular()">▶ Simular Impacto del Rumor</button>
+    </div>
+
+    <div class="results-panel" id="resultsPanel" style="display:none;">
+      <div class="results-header">
+        <span>Análisis de Sensibilidad</span>
+        <span class="badge" id="methodBadge">—</span>
+      </div>
+      <div class="results-body">
+        <div class="result-grid" id="resultGrid"></div>
+
+        <div class="chart-container" style="margin-top:1rem;">
+          <canvas id="chartF" height="260"></canvas>
+        </div>
+
+        <p class="section-title" style="margin-top:1.5rem;">Solución original vs perturbada</p>
+        <table class="data-table">
+          <thead>
+            <tr><th>Variable</th><th>Sin rumor x</th><th>Con rumor x+δx</th><th>Cambio absoluto</th><th>Cambio (%)</th></tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+
+        <div id="infoBox" class="info-box" style="margin-top:1rem;"></div>
+      </div>
+    </div>
+
+  </main>
+  <script src="script.js"></script>
+
+  <footer class="footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+    <p>Proyecto de Métodos Numéricos · Informatica · <strong>Bolivia 2026</strong></p>
+    <div style="display:flex; gap:1rem;">
+      <a href="../inicio.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⌂ Introducción</a>
+      <a href="../index.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⊞ Escenarios</a>
+      <a href="../conclusiones.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">Conclusiones →</a>
+    </div>
+  </footer>
+</body>
+</html>

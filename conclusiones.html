@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conclusiones – Métodos Numéricos Bolivia</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="scenario-page" style="--accent: var(--accent-b);">
+
+  <div class="noise"></div>
+
+  <header class="scenario-header">
+    <a href="index.html" class="back-btn">← Menú</a>
+    <h1>Conclusiones del Proyecto</h1>
+    <span class="scenario-label">Conclusiones</span>
+  </header>
+
+  <main class="scenario-main">
+
+    <!-- QUÉ SE APRENDIÓ -->
+    <p class="section-title">Qué se aprendió</p>
+    <div class="explain-block" style="--accent: var(--accent-b);">
+      <div class="explain-icon">🎓</div>
+      <div class="explain-text">
+        <strong>Los métodos numéricos son herramientas de análisis de la realidad, no solo ejercicios abstractos.</strong>
+        A lo largo de este proyecto quedó demostrado que problemas concretos y urgentes —como la
+        distribución de carburante, la escalada de precios o la dinámica social del descontento—
+        pueden ser formalizados matemáticamente y resueltos computacionalmente con precisión.
+        Se aprendió que <em>ningún método es universalmente superior</em>: cada situación exige
+        evaluar convergencia, estabilidad, costo computacional y precisión requerida. La elección
+        del método correcto es en sí misma una decisión de ingeniería con consecuencias reales.
+        Además, el proyecto evidenció la importancia de la <em>interpretación económica y social</em>
+        de los resultados numéricos: un número sin contexto no comunica nada; un número bien
+        interpretado puede orientar decisiones de política pública.
+      </div>
+    </div>
+
+    <!-- QUÉ MÉTODO FUE MÁS ÚTIL -->
+    <p class="section-title">Método más útil por módulo</p>
+    <div class="results-panel">
+      <div class="results-header">
+        <span>Evaluación comparativa de métodos</span>
+        <span class="badge">por escenario</span>
+      </div>
+      <div class="results-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Módulo</th>
+              <th>Método Destacado</th>
+              <th>Razón de Superioridad</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1 – Sistemas Lineales</td>
+              <td style="color:var(--accent-a);">Gauss-Seidel / SOR</td>
+              <td>Convergencia más rápida que Jacobi en matrices diagonalmente dominantes típicas del problema de distribución. SOR con ω óptimo redujo iteraciones hasta en un 40%.</td>
+            </tr>
+            <tr>
+              <td>2 – Raíces</td>
+              <td style="color:#ff6496;">Newton-Raphson</td>
+              <td>Convergencia cuadrática permite localizar umbrales críticos con altísima precisión en pocas iteraciones, fundamental cuando se requiere identificar puntos de quiebre exactos.</td>
+            </tr>
+            <tr>
+              <td>3 – Interpolación</td>
+              <td style="color:var(--accent-c);">Splines Cúbicos</td>
+              <td>Evita el fenómeno de Runge y produce curvas suaves que reflejan mejor el comportamiento real de los precios. Lagrange y Newton son más susceptibles a oscilaciones con datos dispersos.</td>
+            </tr>
+            <tr>
+              <td>4 – Integración</td>
+              <td style="color:var(--yellow);">Simpson 1/3</td>
+              <td>Error de orden O(h⁴) frente al O(h²) del Trapecio, con el mismo número de evaluaciones. La ganancia en precisión es significativa para calcular costos acumulados sobre intervalos amplios.</td>
+            </tr>
+            <tr>
+              <td>5 – EDOs</td>
+              <td style="color:var(--accent-b);">Runge-Kutta 4</td>
+              <td>Orden 4 con apenas 4 evaluaciones por paso. Captura con fidelidad la dinámica no lineal del vaciado de reservas y del sistema social acoplado, donde Euler acumula errores rápidamente.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LIMITACIONES -->
+    <p class="section-title">Limitaciones del modelo</p>
+    <div class="algo-cards">
+
+      <div class="algo-card" style="--accent: var(--accent-a);">
+        <div class="algo-name" style="color:var(--accent-a);">Datos simplificados</div>
+        <div class="algo-desc">
+          Los parámetros utilizados en los modelos (demandas, capacidades, tasas de consumo,
+          coeficientes sociales) son aproximaciones educativas basadas en reportes disponibles.
+          Un modelo productivo requeriría datos reales en tiempo real provenientes de sensores,
+          registros oficiales y encuestas continuas, con validación estadística rigurosa.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: var(--accent-c);">
+        <div class="algo-name" style="color:var(--accent-c);">Linealidad y suposiciones</div>
+        <div class="algo-desc">
+          Los sistemas de ecuaciones lineales asumen relaciones proporcionales entre variables que
+          en la realidad son no lineales: la demanda no responde linealmente al precio, y los flujos
+          de distribución están sujetos a restricciones de capacidad, geografía y contingencias
+          políticas que el modelo no captura.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: var(--yellow);">
+        <div class="algo-name" style="color:var(--yellow);">Modelos deterministas</div>
+        <div class="algo-desc">
+          Todos los modelos implementados son deterministas: dado un conjunto de parámetros,
+          producen siempre el mismo resultado. La realidad es estocástica: los precios fluctúan
+          por factores aleatorios, los rumores se propagan de forma no uniforme y las decisiones
+          humanas introducen aleatoriedad que solo modelos probabilísticos pueden capturar.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: #ff6496;">
+        <div class="algo-name" style="color:#ff6496;">Dimensionalidad reducida</div>
+        <div class="algo-desc">
+          Los sistemas modelados tienen 3 plantas, 3 zonas o pocas variables de estado. El problema
+          real involucra cientos de nodos de distribución, miles de puntos de venta y millones de
+          agentes individuales. La escalabilidad de los métodos numéricos en estas dimensiones
+          requiere técnicas computacionales avanzadas no cubiertas en este proyecto.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: var(--accent-b);">
+        <div class="algo-name" style="color:var(--accent-b);">Interacciones entre módulos</div>
+        <div class="algo-desc">
+          Cada escenario fue modelado de forma independiente. En la realidad, el vaciado de reservas
+          (módulo 5) afecta directamente los precios (módulo 3), que a su vez determinan el costo
+          acumulado familiar (módulo 4) e impactan la tensión social (módulo 5). Un modelo integrado
+          que acople todos los fenómenos simultáneamente sería considerablemente más representativo.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MEJORAS POSIBLES -->
+    <p class="section-title">Mejoras que se podrían implementar</p>
+    <div class="explain-block" style="--accent: var(--accent-b);">
+      <div class="explain-icon">🚀</div>
+      <div class="explain-text">
+        <strong>Hoja de ruta para versiones futuras del simulador</strong>
+        <br/><br/>
+        <em>1. Datos en tiempo real:</em> Integrar APIs de precios de mercado y reportes de YPFB
+        para alimentar los modelos con datos actualizados automáticamente, eliminando la dependencia
+        de parámetros fijos y convirtiendo el simulador en una herramienta de monitoreo continuo.
+        <br/><br/>
+        <em>2. Modelos estocásticos:</em> Incorporar métodos de Monte Carlo y procesos de Wiener
+        para simular la aleatoriedad inherente a los mercados y al comportamiento social, produciendo
+        distribuciones de probabilidad de resultados en lugar de valores únicos deterministas.
+        <br/><br/>
+        <em>3. Optimización multiobjetivo:</em> Aplicar programación lineal y algoritmos evolutivos
+        para encontrar soluciones de distribución que minimicen simultáneamente el desabastecimiento,
+        el costo logístico y la tensión social, con restricciones reales de capacidad y geografía.
+        <br/><br/>
+        <em>4. Modelo integrado acoplado:</em> Desarrollar un sistema de EDOs que conecte todos
+        los fenómenos simultáneamente: reservas → precios → costo familiar → tensión social →
+        demanda → reservas, creando un modelo de retroalimentación completo del ecosistema crisis.
+        <br/><br/>
+        <em>5. Interfaz geoespacial:</em> Visualizar los resultados sobre un mapa de Bolivia,
+        mostrando flujos de distribución, zonas de mayor presión de precios y focos de tensión
+        social con resolución departamental o municipal.
+      </div>
+    </div>
+
+    <!-- REFLEXIÓN FINAL -->
+    <p class="section-title">Reflexión final</p>
+    <div class="info-box" style="--accent: var(--accent-b); border-left-color: var(--accent-b);">
+      Los métodos numéricos no son técnicas aisladas de un libro de texto: son el puente entre
+      la matemática abstracta y los problemas que afectan la vida de millones de personas.
+      Este proyecto demuestra que modelar una crisis —aunque con simplificaciones— permite
+      <strong>entender sus mecanismos, anticipar sus consecuencias y diseñar intervenciones</strong>
+      más inteligentes. La habilidad de formular un problema real como un sistema matemático
+      resoluble computacionalmente es una de las competencias más valiosas que puede desarrollar
+      un ingeniero o científico de datos en el siglo XXI.
+    </div>
+
+    <div style="display:flex; gap:1rem; margin-top:1rem; flex-wrap:wrap;">
+      <a href="index.html" class="run-btn" style="display:inline-block; text-align:center; text-decoration:none; background:var(--accent-b); color:#000; padding:0.85rem 2rem; border-radius:3px; font-family:var(--font-head); font-weight:700; font-size:0.9rem; letter-spacing:0.08em; text-transform:uppercase;">
+        ← Volver al Menú
+      </a>
+      <a href="inicio.html" class="run-btn" style="display:inline-block; text-align:center; text-decoration:none; background:var(--surface); color:var(--text); border:1px solid var(--border); padding:0.85rem 2rem; border-radius:3px; font-family:var(--font-head); font-weight:700; font-size:0.9rem; letter-spacing:0.08em; text-transform:uppercase;">
+        ← Ver Introducción
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>Proyecto de Métodos Numéricos · Informatica · <strong>Bolivia 2026</strong></p>
+  </footer>
+
+</body>
+</html>

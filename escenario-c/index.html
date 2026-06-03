@@ -1,0 +1,152 @@
+ 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escenario C – Precios</title>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="scenario-page accent-c">
+  <div class="noise"></div>
+
+  <header class="scenario-header">
+    <a href="../index.html" class="back-btn">← Menú</a>
+    <h1>Curva de Precios de Alimentos</h1>
+    <span class="scenario-label">Escenario C</span>
+  </header>
+
+  <main class="scenario-main">
+
+    <div class="info-box">
+      Se reconstruye la curva de precios usando datos dispersos del mercado. Los métodos de
+      interpolación permiten estimar precios en días sin datos y visualizar la tendencia mensual.
+      Podés editar los datos o agregar puntos propios.
+    </div>
+
+    <!-- EXPLICACIÓN DEL PROBLEMA -->
+    <p class="section-title">Problema Real</p>
+    <div class="explain-block">
+      <div class="explain-icon">📈</div>
+      <div class="explain-text">
+        <strong>Volatilidad de precios de alimentos básicos en Bolivia durante la escasez.</strong>
+        En contextos de desabastecimiento, los precios de la canasta básica no son registrados
+        cada día: los datos disponibles son esporádicos —encuestas semanales, reportes de
+        mercado cada ciertos días, observaciones puntuales de inspectores—. Sin embargo, las
+        familias y los gestores de política pública necesitan conocer el precio en cualquier
+        día del mes. La <em>interpolación numérica</em> permite reconstruir la curva continua
+        de precios a partir de esos datos dispersos, estimando con precisión matemática el
+        valor en días sin medición y revelando la tendencia real del mercado.
+      </div>
+    </div>
+
+    <!-- EXPLICACIÓN DEL ALGORITMO -->
+    <p class="section-title">Algoritmos Utilizados</p>
+    <div class="algo-cards">
+
+      <div class="algo-card">
+        <div class="algo-name">Interpolación de Lagrange</div>
+        <div class="algo-desc">
+          Construye un polinomio de grado n−1 que pasa exactamente por los n puntos dados.
+          Cada término L<sub>i</sub>(x) es un polinomio que vale 1 en x<sub>i</sub> y 0 en
+          todos los demás nodos. P(x) = Σ y<sub>i</sub>·L<sub>i</sub>(x). Conceptualmente
+          elegante pero computacionalmente costoso para muchos puntos y susceptible al
+          fenómeno de Runge (oscilaciones en los extremos).
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Newton (Diferencias Divididas)</div>
+        <div class="algo-desc">
+          Forma alternativa del mismo polinomio de Lagrange, organizada en una tabla
+          de diferencias divididas. La ventaja clave es que agregar un nuevo punto de
+          datos solo requiere extender la tabla: no hay que recalcular todo desde cero.
+          P(x) = f[x₀] + f[x₀,x₁](x−x₀) + f[x₀,x₁,x₂](x−x₀)(x−x₁) + …
+          Más eficiente y numéricamente estable que Lagrange.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Splines Cúbicos Naturales</div>
+        <div class="algo-desc">
+          En lugar de usar un único polinomio de alto grado, divide el intervalo en
+          segmentos y ajusta un polinomio cúbico diferente en cada uno. Las condiciones
+          de continuidad (hasta segunda derivada) en los nodos garantizan una curva
+          suave sin las oscilaciones de Runge. Con condición de frontera natural
+          (segunda derivada = 0 en extremos) produce la interpolación más suave posible,
+          ideal para curvas de precios que deben ser realistas.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MÉTODO -->
+    <p class="section-title">Seleccionar Método de Interpolación</p>
+    <div class="method-selector" id="methodSelector">
+      <button class="method-btn active" data-method="lagrange">Lagrange</button>
+      <button class="method-btn" data-method="newton">Newton (Diferencias Divididas)</button>
+      <button class="method-btn" data-method="spline">Splines Cúbicos</button>
+    </div>
+
+    <!-- DATOS -->
+    <div class="input-panel">
+      <p class="section-title">Datos del mercado (Día → Precio en Bs)</p>
+
+      <div id="puntosContainer"></div>
+
+      <div style="display:flex;gap:0.8rem;margin-top:1rem;flex-wrap:wrap;">
+        <button class="run-btn" style="flex:none;width:auto;padding:0.6rem 1.2rem;font-size:0.75rem;" onclick="agregarPunto()">+ Agregar punto</button>
+        <button class="run-btn" style="flex:none;width:auto;padding:0.6rem 1.2rem;font-size:0.75rem;background:var(--surface);color:var(--text);border:1px solid var(--border);" onclick="resetDatos()">↺ Restablecer</button>
+      </div>
+
+      <div style="height:1rem;"></div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label>Estimar precio en el día</label>
+          <input type="number" id="diaEstimar" value="7" min="1" max="31"/>
+        </div>
+      </div>
+
+      <button class="run-btn" onclick="interpolar()">▶ Interpolar Curva</button>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div class="results-panel" id="resultsPanel" style="display:none;">
+      <div class="results-header">
+        <span>Resultados de Interpolación</span>
+        <span class="badge" id="methodBadge">—</span>
+      </div>
+      <div class="results-body">
+        <div class="result-grid" id="resultGrid"></div>
+
+        <div class="chart-container" style="margin-top:1rem;">
+          <canvas id="chartC" height="280"></canvas>
+        </div>
+
+        <p class="section-title" style="margin-top:1.5rem;">Curva interpolada (días 1–31)</p>
+        <table class="data-table">
+          <thead>
+            <tr><th>Día</th><th>Precio estimado (Bs)</th><th>¿Dato original?</th></tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+
+  <footer class="footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+    <p>Proyecto de Métodos Numéricos · Informatica · <strong>Bolivia 2026</strong></p>
+    <div style="display:flex; gap:1rem;">
+      <a href="../inicio.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⌂ Introducción</a>
+      <a href="../index.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⊞ Escenarios</a>
+      <a href="../conclusiones.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">Conclusiones →</a>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escenario D – Costo Acumulado</title>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="scenario-page accent-d">
+  <div class="noise"></div>
+
+  <header class="scenario-header">
+    <a href="../index.html" class="back-btn">← Menú</a>
+    <h1>Costo Acumulado y Pérdida del Poder Adquisitivo</h1>
+    <span class="scenario-label">Escenario D</span>
+  </header>
+
+  <main class="scenario-main">
+
+    <div class="info-box">
+      Si una familia compra diariamente una canasta básica, el costo acumulado se representa como
+      el <strong>área bajo la curva de precios</strong>: <em>C = ∫ P(t) dt</em>.
+      Se comparan los tres métodos de integración para ver cuál es más preciso.
+    </div>
+
+    <!-- EXPLICACIÓN DEL PROBLEMA -->
+    <p class="section-title">Problema Real</p>
+    <div class="explain-block">
+      <div class="explain-icon">💸</div>
+      <div class="explain-text">
+        <strong>Erosión del poder adquisitivo de las familias bolivianas durante la crisis.</strong>
+        Con precios subiendo cada día, una familia que compra su canasta básica diariamente
+        enfrenta un gasto total mensual que no es simplemente precio × días: la curva de precios
+        cambia continuamente. El costo real acumulado es el <em>área bajo esa curva de precios</em>,
+        es decir, una integral. Cuando el costo acumulado supera el ingreso mensual familiar,
+        la familia entra en déficit. La <em>integración numérica</em> permite calcular ese costo
+        total con precisión, comparar distintas trayectorias de precios (exponencial, cuadrática,
+        con picos de pánico) y determinar en qué punto el gasto supera la capacidad económica del hogar.
+      </div>
+    </div>
+
+    <!-- EXPLICACIÓN DEL ALGORITMO -->
+    <p class="section-title">Algoritmos Utilizados</p>
+    <div class="algo-cards">
+
+      <div class="algo-card">
+        <div class="algo-name">Regla del Trapecio</div>
+        <div class="algo-desc">
+          Aproxima el área bajo la curva dividiendo el intervalo en n subintervalos y
+          calculando el área de trapecios entre puntos consecutivos:
+          ∫P dt ≈ h/2 · [P(t₀) + 2P(t₁) + … + 2P(t<sub>n-1</sub>) + P(t<sub>n</sub>)].
+          Error de orden O(h²). Simple y robusto, funciona bien con funciones suaves
+          y es el punto de partida para métodos más sofisticados.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Simpson 1/3</div>
+        <div class="algo-desc">
+          Usa polinomios cuadráticos para aproximar la curva en cada par de subintervalos.
+          Requiere n par: ∫P dt ≈ h/3 · [P₀ + 4P₁ + 2P₂ + 4P₃ + … + P<sub>n</sub>].
+          Error de orden O(h⁴), notablemente más preciso que el trapecio con el mismo
+          número de evaluaciones. Es el método estándar cuando la curva es suave.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Simpson 3/8</div>
+        <div class="algo-desc">
+          Variante de Simpson que usa polinomios cúbicos en grupos de 3 subintervalos.
+          Requiere n múltiplo de 3: ∫P dt ≈ 3h/8 · [P₀ + 3P₁ + 3P₂ + 2P₃ + … + P<sub>n</sub>].
+          Mismo orden de error O(h⁴) que Simpson 1/3, pero útil cuando el número de
+          subintervalos disponible es múltiplo de 3, o para combinar con Simpson 1/3
+          en intervalos compuestos.
+        </div>
+      </div>
+
+    </div>
+
+    <p class="section-title">Seleccionar Método de Integración</p>
+    <div class="method-selector" id="methodSelector">
+      <button class="method-btn active" data-method="trapecio">Trapecio</button>
+      <button class="method-btn" data-method="simpson13">Simpson 1/3</button>
+      <button class="method-btn" data-method="simpson38">Simpson 3/8</button>
+      <button class="method-btn" data-method="todos">Comparar todos</button>
+    </div>
+
+    <div class="input-panel">
+      <p class="section-title">Parámetros de la familia</p>
+      <div class="input-row">
+        <div class="input-group">
+          <label>Precio inicial canasta (Bs/día)</label>
+          <input type="number" id="p0" value="35" min="1"/>
+        </div>
+        <div class="input-group">
+          <label>Tasa de crecimiento diario (%)</label>
+          <input type="number" id="tasa" value="2.5" step="0.1" min="0"/>
+        </div>
+        <div class="input-group">
+          <label>Días del mes</label>
+          <input type="number" id="dias" value="30" min="2" max="90"/>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>Ingreso familiar mensual (Bs)</label>
+          <input type="number" id="ingreso" value="2500" min="1"/>
+        </div>
+        <div class="input-group">
+          <label>Número de subintervalos n</label>
+          <input type="number" id="nSub" value="30" min="2" max="300"/>
+        </div>
+        <div class="input-group">
+          <label>Tipo de curva de precios</label>
+          <select id="tipoCurva">
+            <option value="exponencial">Exponencial</option>
+            <option value="lineal">Lineal</option>
+            <option value="cuadratica">Cuadrática</option>
+            <option value="mixta">Mixta (con pánico)</option>
+          </select>
+        </div>
+      </div>
+      <button class="run-btn" onclick="calcular()">▶ Calcular Costo Acumulado</button>
+    </div>
+
+    <div class="results-panel" id="resultsPanel" style="display:none;">
+      <div class="results-header">
+        <span>Resultados</span>
+        <span class="badge" id="methodBadge">—</span>
+      </div>
+      <div class="results-body">
+        <div class="result-grid" id="resultGrid"></div>
+
+        <div class="chart-container" style="margin-top:1rem;">
+          <canvas id="chartD" height="270"></canvas>
+        </div>
+
+        <p class="section-title" style="margin-top:1.5rem;">Comparación de métodos</p>
+        <table class="data-table" id="compTable">
+          <thead>
+            <tr><th>Método</th><th>Costo acumulado (Bs)</th><th>Error vs Exacto (%)</th></tr>
+          </thead>
+          <tbody id="compBody"></tbody>
+        </table>
+
+        <p class="section-title" style="margin-top:1.5rem;">Precio diario y área acumulada</p>
+        <table class="data-table">
+          <thead>
+            <tr><th>Día</th><th>Precio (Bs)</th><th>Acumulado (Bs)</th><th>% del ingreso</th></tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+  <script src="script.js"></script>
+
+  <footer class="footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+    <p>Proyecto de Métodos Numéricos · Informatica · <strong>Bolivia 2026</strong></p>
+    <div style="display:flex; gap:1rem;">
+      <a href="../inicio.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⌂ Introducción</a>
+      <a href="../index.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⊞ Escenarios</a>
+      <a href="../conclusiones.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">Conclusiones →</a>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio – Métodos Numéricos Bolivia</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="scenario-page" style="--accent: var(--yellow);">
+
+  <div class="noise"></div>
+
+  <header class="scenario-header">
+    <a href="index.html" class="back-btn">← Menú</a>
+    <h1>Inicio – Presentación del Proyecto</h1>
+    <span class="scenario-label">Inicio</span>
+  </header>
+
+  <main class="scenario-main">
+
+    <!-- PRESENTACIÓN DEL PROBLEMA -->
+    <p class="section-title">Presentación del Problema</p>
+    <div class="explain-block" style="--accent: var(--yellow);">
+      <div class="explain-icon">🇧🇴</div>
+      <div class="explain-text">
+        <strong>Crisis de abastecimiento en Bolivia (2024–2025)</strong>
+        Bolivia atravesó una de las crisis logísticas más severas de su historia reciente: escasez
+        masiva de carburante, filas kilométricas en surtidores, desabastecimiento de alimentos
+        básicos en zonas urbanas y rurales, y una escalada de precios sin precedentes. Esta situación
+        puso en evidencia la <em>fragilidad estructural</em> de las redes de distribución nacional
+        y la ausencia de modelos predictivos que permitieran anticipar y gestionar el colapso logístico.
+        El presente proyecto aborda este escenario real mediante el uso de <em>métodos numéricos</em>
+        aplicados a cinco categorías de problemas matemáticos que emergen directamente de la crisis.
+      </div>
+    </div>
+
+    <!-- CONTEXTO GENERAL -->
+    <p class="section-title">Contexto General</p>
+    <div class="algo-cards">
+
+      <div class="algo-card" style="--accent: var(--yellow);">
+        <div class="algo-name">Escasez de Carburante</div>
+        <div class="algo-desc">
+          Desde 2024, Bolivia enfrentó una reducción crítica en sus reservas de hidrocarburos.
+          Las plantas de distribución operaban por debajo del 30% de su capacidad normal,
+          generando desabastecimiento en cadena que afectó transporte, producción agrícola y
+          comercio en todo el territorio nacional.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: var(--yellow);">
+        <div class="algo-name">Inflación y Pérdida Adquisitiva</div>
+        <div class="algo-desc">
+          Los precios de la canasta básica se dispararon entre un 40% y 120% en algunos
+          productos. Familias de bajos ingresos destinaron más del 80% de sus ingresos
+          mensuales a alimentación, superando ampliamente el umbral de pobreza alimentaria
+          establecido por organismos internacionales.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: var(--yellow);">
+        <div class="algo-name">Tensión Social</div>
+        <div class="algo-desc">
+          La escasez desencadenó protestas, bloqueos de rutas y conflictos sociales en
+          múltiples departamentos. El descontento se propagó de manera exponencial, siguiendo
+          dinámicas similares a modelos epidemiológicos, con neutrales que se sumaban a la
+          movilización al interactuar con manifestantes activos.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: var(--yellow);">
+        <div class="algo-name">Desinformación y Pánico</div>
+        <div class="algo-desc">
+          Rumores sobre el cierre de surtidores o incrementos inminentes de precios generaron
+          oleadas de compra de pánico que multiplicaban la demanda real por 2–3 veces en cuestión
+          de horas, colapsando sistemas de distribución que en condiciones normales eran funcionales.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- OBJETIVO DE LA SIMULACIÓN -->
+    <p class="section-title">Objetivo de la Simulación</p>
+    <div class="info-box" style="--accent: var(--yellow);">
+      El objetivo central de este simulador es demostrar cómo los <strong>métodos numéricos</strong>
+      permiten modelar, analizar y predecir fenómenos reales complejos que emergen en contextos de
+      crisis socioeconómica. A través de cinco módulos interactivos, el proyecto aplica sistemas de
+      ecuaciones lineales, raíces de ecuaciones, interpolación, integración numérica y ecuaciones
+      diferenciales ordinarias a escenarios concretos extraídos de la crisis boliviana 2024–2025.
+    </div>
+
+    <div class="algo-cards">
+
+      <div class="algo-card" style="--accent: var(--accent-a);">
+        <div class="algo-name" style="color: var(--accent-a);">Módulo 1 – Sistemas Lineales</div>
+        <div class="algo-desc">
+          Modelar la red de distribución de carburante y alimentos como un sistema Ax = b,
+          optimizando los flujos entre plantas y zonas para minimizar el desabastecimiento.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: var(--accent-c);">
+        <div class="algo-name" style="color: var(--accent-c);">Módulo 2 – Raíces de Ecuaciones</div>
+        <div class="algo-desc">
+          Identificar umbrales críticos: el punto donde el gasto familiar supera el ingreso,
+          la tasa mínima de reposición para evitar el colapso, y el nivel de tensión social
+          a partir del cual una protesta se masifica de forma irreversible.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: var(--accent-c);">
+        <div class="algo-name" style="color: var(--accent-c);">Módulo 3 – Interpolación</div>
+        <div class="algo-desc">
+          Reconstruir curvas continuas de precios a partir de datos dispersos del mercado,
+          permitiendo estimar el valor en cualquier día sin medición directa y visualizar
+          la tendencia real de la inflación mensual.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: #ff6496;">
+        <div class="algo-name" style="color: #ff6496;">Módulo 4 – Integración Numérica</div>
+        <div class="algo-desc">
+          Calcular el costo acumulado real que enfrenta una familia boliviana durante la crisis,
+          representado como el área bajo la curva de precios diarios, y determinar cuándo ese
+          costo supera su capacidad económica mensual.
+        </div>
+      </div>
+
+      <div class="algo-card" style="--accent: var(--accent-b);">
+        <div class="algo-name" style="color: var(--accent-b);">Módulo 5 – Ecuaciones Diferenciales</div>
+        <div class="algo-desc">
+          Simular la evolución temporal de reservas de carburante y la dinámica social del
+          descontento ciudadano mediante sistemas de EDOs acopladas, prediciendo puntos críticos
+          de agotamiento y masificación de protestas.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ESTRUCTURA DEL SITIO -->
+    <p class="section-title">Estructura del Sitio</p>
+    <div class="results-panel">
+      <div class="results-header">
+        <span>Mapa de navegación</span>
+        <span class="badge">7 escenarios interactivos</span>
+      </div>
+      <div class="results-body">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Escenario</th>
+              <th>Módulo</th>
+              <th>Método Principal</th>
+              <th>Problema Modelado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><a href="escenario-a/index.html" style="color:var(--accent-a);">A – Abastecimiento</a></td><td>Módulo 1</td><td>Jacobi / Gauss-Seidel / SOR / LU</td><td>Red de distribución de carburante</td></tr>
+            <tr><td><a href="escenario-f/index.html" style="color:#64c8ff;">F – Rumores y Pánico</a></td><td>Módulo 1</td><td>Análisis de perturbación / κ(A)</td><td>Sensibilidad del sistema ante desinformación</td></tr>
+            <tr><td><a href="escenario-e/index.html" style="color:#ff6496;">E – Umbrales Críticos</a></td><td>Módulo 2</td><td>Bisección / Newton-Raphson / Secante</td><td>Puntos de quiebre económico y social</td></tr>
+            <tr><td><a href="escenario-c/index.html" style="color:var(--accent-c);">C – Curva de Precios</a></td><td>Módulo 3</td><td>Lagrange / Newton / Splines</td><td>Reconstrucción de curva de precios</td></tr>
+            <tr><td><a href="escenario-d/index.html" style="color:var(--yellow);">D – Costo Acumulado</a></td><td>Módulo 4</td><td>Trapecio / Simpson 1/3 / Simpson 3/8</td><td>Costo total y pérdida adquisitiva familiar</td></tr>
+            <tr><td><a href="escenario-b/index.html" style="color:var(--accent-b);">B – Reservas</a></td><td>Módulo 5</td><td>Euler / Heun / Runge-Kutta 4</td><td>Vaciado de reservas de carburante</td></tr>
+            <tr><td><a href="escenario-g/index.html" style="color:#b4ff64;">G – Descontento Social</a></td><td>Módulo 5</td><td>Heun / Runge-Kutta 4</td><td>Difusión de opinión y protesta social</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:1rem; margin-top:1rem;">
+      <a href="index.html" class="run-btn" style="display:inline-block; text-align:center; text-decoration:none; background:var(--yellow); color:#000; padding:0.85rem 2rem; border-radius:3px; font-family:var(--font-head); font-weight:700; font-size:0.9rem; letter-spacing:0.08em; text-transform:uppercase;">
+        → Ver todos los escenarios
+      </a>
+      <a href="conclusiones.html" class="run-btn" style="display:inline-block; text-align:center; text-decoration:none; background:var(--surface); color:var(--text); border:1px solid var(--border); padding:0.85rem 2rem; border-radius:3px; font-family:var(--font-head); font-weight:700; font-size:0.9rem; letter-spacing:0.08em; text-transform:uppercase;">
+        → Ver Conclusiones
+      </a>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <p>Proyecto de Métodos Numéricos · Informatica · <strong>Bolivia 2026</strong></p>
+  </footer>
+
+</body>
+</html>

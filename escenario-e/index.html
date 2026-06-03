@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escenario E – Umbrales Críticos</title>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="scenario-page accent-e">
+  <div class="noise"></div>
+
+  <header class="scenario-header">
+    <a href="../index.html" class="back-btn">← Menú</a>
+    <h1>Umbrales Críticos de Abastecimiento</h1>
+    <span class="scenario-label">Escenario E</span>
+  </header>
+
+  <main class="scenario-main">
+
+    <div class="info-box">
+      Se buscan raíces de funciones no lineales que representan:
+      el <strong>punto donde el costo supera el ingreso familiar</strong>,
+      la <strong>tasa de reposición crítica</strong> (consumo = llegada) y
+      el <strong>umbral de opinión social</strong> (estabilidad ↔ masificación).
+      Seleccioná la función y el método numérico.
+    </div>
+
+    <!-- EXPLICACIÓN DEL PROBLEMA -->
+    <p class="section-title">Problema Real</p>
+    <div class="explain-block">
+      <div class="explain-icon">🎯</div>
+      <div class="explain-text">
+        <strong>Umbrales críticos en la crisis boliviana: ¿cuándo se cruza el límite?</strong>
+        Muchos fenómenos de la crisis no son continuos sino que tienen <em>puntos de quiebre</em>:
+        el día exacto en que el gasto familiar supera el ingreso mensual; la tasa mínima de
+        reposición de carburante para que el sistema no colapse; el nivel de descontento social
+        a partir del cual una protesta se masifica irreversiblemente. Todos estos son problemas
+        de <em>búsqueda de raíces</em>: encontrar el valor x donde f(x) = 0. La función f
+        mide el desequilibrio —déficit económico, déficit logístico, tensión social— y su
+        raíz es el umbral crítico. Identificarlo con precisión permite actuar antes de
+        que el sistema entre en crisis.
+      </div>
+    </div>
+
+    <!-- EXPLICACIÓN DEL ALGORITMO -->
+    <p class="section-title">Algoritmos Utilizados</p>
+    <div class="algo-cards">
+
+      <div class="algo-card">
+        <div class="algo-name">Bisección</div>
+        <div class="algo-desc">
+          Método garantizado si f(a)·f(b) &lt; 0. Divide el intervalo [a,b] por la mitad en
+          cada iteración y conserva el subintervalo donde f cambia de signo. Converge
+          siempre, con error que se reduce a la mitad cada paso: error ≤ (b−a)/2<sup>n</sup>.
+          Lento (convergencia lineal) pero absolutamente confiable. Ideal como primer
+          diagnóstico para localizar el umbral crítico.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Newton-Raphson</div>
+        <div class="algo-desc">
+          Usa la tangente a la curva para saltar hacia la raíz:
+          x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)/f'(x<sub>n</sub>).
+          Convergencia cuadrática cerca de la raíz (el número de dígitos correctos
+          se duplica en cada iteración). Requiere calcular la derivada y una buena
+          aproximación inicial. Puede diverger si f' ≈ 0 o si la función tiene
+          comportamiento irregular.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Secante</div>
+        <div class="algo-desc">
+          Variante de Newton-Raphson que evita calcular f' usando una aproximación
+          por diferencias finitas con dos puntos anteriores:
+          x<sub>n+1</sub> = x<sub>n</sub> − f(x<sub>n</sub>)·(x<sub>n</sub>−x<sub>n-1</sub>)/(f(x<sub>n</sub>)−f(x<sub>n-1</sub>)).
+          Convergencia superlineal (orden ≈ 1.618, el número áureo). Útil cuando la
+          derivada analítica no está disponible o es costosa de calcular.
+        </div>
+      </div>
+
+    </div>
+
+    <p class="section-title">Seleccionar Método de Búsqueda de Raíces</p>
+    <div class="method-selector" id="methodSelector">
+      <button class="method-btn active" data-method="biseccion">Bisección</button>
+      <button class="method-btn" data-method="newtonraphson">Newton-Raphson</button>
+      <button class="method-btn" data-method="secante">Secante</button>
+    </div>
+
+    <div class="input-panel">
+      <p class="section-title">Función a resolver</p>
+      <div class="input-row">
+        <div class="input-group" style="grid-column: 1/-1;">
+          <label>Escenario de la función</label>
+          <select id="fnTipo">
+            <option value="costovsingreso">f(t) = Costo acumulado(t) − Ingreso mensual (¿cuándo se agota?)</option>
+            <option value="reposicion">f(r) = Consumo − Llegada(r) (tasa crítica de reposición)</option>
+            <option value="opinion">f(x) = Opinión social − Umbral de masificación</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="paramsA" class="input-row">
+        <div class="input-group">
+          <label>Precio base (Bs/día)</label>
+          <input type="number" id="precioBase" value="35" min="1"/>
+        </div>
+        <div class="input-group">
+          <label>Tasa crecimiento precio (%/día)</label>
+          <input type="number" id="tasaE" value="2.5" step="0.1"/>
+        </div>
+        <div class="input-group">
+          <label>Ingreso mensual (Bs)</label>
+          <input type="number" id="ingresoE" value="2500"/>
+        </div>
+      </div>
+      <div id="paramsB" class="input-row" style="display:none;">
+        <div class="input-group">
+          <label>Consumo diario (ton)</label>
+          <input type="number" id="consumoE" value="400"/>
+        </div>
+        <div class="input-group">
+          <label>Capacidad máx. llegada (ton)</label>
+          <input type="number" id="llegadaMax" value="500"/>
+        </div>
+      </div>
+      <div id="paramsC" class="input-row" style="display:none;">
+        <div class="input-group">
+          <label>Tasa de contagio α</label>
+          <input type="number" id="alfa" value="0.3" step="0.01"/>
+        </div>
+        <div class="input-group">
+          <label>Tasa de recuperación β</label>
+          <input type="number" id="beta" value="0.1" step="0.01"/>
+        </div>
+        <div class="input-group">
+          <label>Umbral de masificación U</label>
+          <input type="number" id="umbral" value="0.5" step="0.01"/>
+        </div>
+      </div>
+
+      <div class="input-row">
+        <div class="input-group">
+          <label>Extremo a (intervalo / x0)</label>
+          <input type="number" id="xa" value="0" step="0.1"/>
+        </div>
+        <div class="input-group">
+          <label>Extremo b (intervalo / x1)</label>
+          <input type="number" id="xb" value="30" step="0.1"/>
+        </div>
+        <div class="input-group">
+          <label>Tolerancia</label>
+          <input type="number" id="tolE" value="0.0001" step="0.00001"/>
+        </div>
+        <div class="input-group">
+          <label>Max Iteraciones</label>
+          <input type="number" id="maxIterE" value="100"/>
+        </div>
+      </div>
+      <button class="run-btn" onclick="buscarRaiz()">▶ Buscar Raíz</button>
+    </div>
+
+    <div class="results-panel" id="resultsPanel" style="display:none;">
+      <div class="results-header">
+        <span>Resultados</span>
+        <span class="badge" id="methodBadge">—</span>
+      </div>
+      <div class="results-body">
+        <div class="result-grid" id="resultGrid"></div>
+
+        <div class="chart-container" style="margin-top:1rem;">
+          <canvas id="chartE" height="270"></canvas>
+        </div>
+
+        <p class="section-title" style="margin-top:1.5rem;">Tabla de iteraciones</p>
+        <table class="data-table">
+          <thead>
+            <tr><th>Iter.</th><th>x aprox.</th><th>f(x)</th><th>Error</th></tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+  <script src="script.js"></script>
+
+  <footer class="footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+    <p>Proyecto de Métodos Numéricos · Informatica · <strong>Bolivia 2026</strong></p>
+    <div style="display:flex; gap:1rem;">
+      <a href="../inicio.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⌂ Introducción</a>
+      <a href="../index.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⊞ Escenarios</a>
+      <a href="../conclusiones.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">Conclusiones →</a>
+    </div>
+  </footer>
+</body>
+</html>

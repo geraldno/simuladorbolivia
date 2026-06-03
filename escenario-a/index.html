@@ -1,0 +1,198 @@
+ 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Escenario A – Abastecimiento</title>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="scenario-page accent-a">
+  <div class="noise"></div>
+
+  <header class="scenario-header">
+    <a href="../index.html" class="back-btn">← Menú</a>
+    <h1>Optimización de Abastecimiento y Red de Transporte</h1>
+    <span class="scenario-label">Escenario A</span>
+  </header>
+
+  <main class="scenario-main">
+
+    <div class="info-box">
+      Se modela la distribución de carburante desde <strong>3 plantas</strong> hacia <strong>3 zonas</strong> (Norte, Centro, Sur).
+      El sistema de ecuaciones representa el equilibrio entre oferta y demanda. Seleccioná el método y ajustá los parámetros.
+    </div>
+
+    <!-- EXPLICACIÓN DEL PROBLEMA -->
+    <p class="section-title">Problema Real</p>
+    <div class="explain-block">
+      <div class="explain-icon">⚡</div>
+      <div class="explain-text">
+        <strong>Crisis de abastecimiento de carburante en Bolivia (2024–2025).</strong>
+        Largas filas en surtidores, desabastecimiento regional y distribución desigual entre zonas
+        del país pusieron en evidencia la fragilidad de la red logística nacional. Este escenario
+        modela ese problema como un <em>sistema de ecuaciones lineales</em>: cada zona tiene una
+        demanda fija y cada planta tiene una capacidad limitada. Encontrar cuánto debe enviar cada
+        planta a cada zona —sin exceder su capacidad y satisfaciendo la demanda— es exactamente
+        resolver el sistema <strong>Ax = b</strong>, donde A codifica las rutas, x son los flujos
+        y b son las demandas. La solución óptima permite minimizar el desabastecimiento y distribuir
+        equitativamente el carburante disponible.
+      </div>
+    </div>
+
+    <!-- EXPLICACIÓN DEL ALGORITMO -->
+    <p class="section-title">Algoritmos Utilizados</p>
+    <div class="algo-cards">
+
+      <div class="algo-card">
+        <div class="algo-name">Jacobi</div>
+        <div class="algo-desc">
+          Método iterativo que actualiza <em>todas</em> las variables simultáneamente usando los
+          valores del paso anterior. En cada iteración k, calcula
+          x<sub>i</sub><sup>(k+1)</sup> = (b<sub>i</sub> − Σ a<sub>ij</sub>x<sub>j</sub><sup>(k)</sup>) / a<sub>ii</sub>
+          para todo j ≠ i. Converge si la matriz es diagonalmente dominante. Es sencillo de
+          paralelizar pero más lento que Gauss-Seidel.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Gauss-Seidel</div>
+        <div class="algo-desc">
+          Variante de Jacobi que usa inmediatamente cada valor recién calculado. Al actualizar
+          x<sub>i</sub> ya incorpora los x<sub>1</sub>…x<sub>i-1</sub> del paso actual, lo que
+          acelera la convergencia. Requiere aproximadamente la mitad de iteraciones que Jacobi
+          en sistemas bien condicionados.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">SOR (Sobre-relajación)</div>
+        <div class="algo-desc">
+          Extiende Gauss-Seidel con un factor de relajación ω ∈ (0, 2). Cada nueva estimación
+          se combina con la anterior: x<sub>i</sub><sup>new</sup> = (1−ω)x<sub>i</sub><sup>old</sup>
+          + ω·x<sub>i</sub><sup>GS</sup>. Con ω óptimo (típicamente 1.2–1.8) la convergencia
+          puede ser varias veces más rápida. ω = 1 equivale a Gauss-Seidel puro.
+        </div>
+      </div>
+
+      <div class="algo-card">
+        <div class="algo-name">Descomposición LU</div>
+        <div class="algo-desc">
+          Método directo (no iterativo) que factoriza A = L·U, donde L es triangular inferior y
+          U es triangular superior. Resuelve primero Ly = b (sustitución hacia adelante) y luego
+          Ux = y (sustitución hacia atrás). Produce la solución exacta (salvo errores de redondeo)
+          en un número fijo de operaciones O(n³). Ideal cuando se necesita resolver el mismo
+          sistema con múltiples vectores b.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MÉTODO SELECTOR -->
+    <p class="section-title">Seleccionar Método</p>
+    <div class="method-selector" id="methodSelector">
+      <button class="method-btn active" data-method="jacobi">Jacobi</button>
+      <button class="method-btn" data-method="gaussseidel">Gauss-Seidel</button>
+      <button class="method-btn" data-method="sor">SOR</button>
+      <button class="method-btn" data-method="lu">Descomposición LU</button>
+    </div>
+
+    <!-- PARÁMETROS -->
+    <div class="input-panel">
+      <p class="section-title">Parámetros del sistema</p>
+      <div class="input-row">
+        <div class="input-group">
+          <label>Demanda Zona Norte (ton)</label>
+          <input type="number" id="dNorte" value="150" min="1"/>
+        </div>
+        <div class="input-group">
+          <label>Demanda Zona Centro (ton)</label>
+          <input type="number" id="dCentro" value="200" min="1"/>
+        </div>
+        <div class="input-group">
+          <label>Demanda Zona Sur (ton)</label>
+          <input type="number" id="dSur" value="180" min="1"/>
+        </div>
+      </div>
+      <div class="input-row">
+        <div class="input-group">
+          <label>Capacidad Planta 1 (ton)</label>
+          <input type="number" id="cap1" value="200" min="1"/>
+        </div>
+        <div class="input-group">
+          <label>Capacidad Planta 2 (ton)</label>
+          <input type="number" id="cap2" value="180" min="1"/>
+        </div>
+        <div class="input-group">
+          <label>Capacidad Planta 3 (ton)</label>
+          <input type="number" id="cap3" value="150" min="1"/>
+        </div>
+      </div>
+      <div class="input-row" id="sorRow" style="display:none;">
+        <div class="input-group">
+          <label>Factor ω (SOR, 0 &lt; ω &lt; 2)</label>
+          <input type="number" id="omega" value="1.2" min="0.01" max="1.99" step="0.05"/>
+        </div>
+        <div class="input-group">
+          <label>Tolerancia</label>
+          <input type="number" id="tol" value="0.0001" step="0.00001"/>
+        </div>
+        <div class="input-group">
+          <label>Max Iteraciones</label>
+          <input type="number" id="maxIter" value="100"/>
+        </div>
+      </div>
+      <div class="input-row" id="iterRow">
+        <div class="input-group">
+          <label>Tolerancia</label>
+          <input type="number" id="tolIter" value="0.0001" step="0.00001"/>
+        </div>
+        <div class="input-group">
+          <label>Max Iteraciones</label>
+          <input type="number" id="maxIterIter" value="100"/>
+        </div>
+      </div>
+      <button class="run-btn" onclick="resolver()">▶ Resolver Sistema</button>
+    </div>
+
+    <!-- RESULTADOS -->
+    <div class="results-panel" id="resultsPanel" style="display:none;">
+      <div class="results-header">
+        <span>Resultados</span>
+        <span class="badge" id="methodBadge">—</span>
+      </div>
+      <div class="results-body">
+        <div class="result-grid" id="resultGrid"></div>
+
+        <p class="section-title" style="margin-top:1rem;">Distribución por ruta (toneladas)</p>
+        <table class="data-table">
+          <thead>
+            <tr><th>Origen \ Destino</th><th>Zona Norte</th><th>Zona Centro</th><th>Zona Sur</th></tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+
+        <div class="chart-container" style="margin-top:1.5rem;">
+          <canvas id="chartA" height="260"></canvas>
+        </div>
+
+        <div id="iterInfo" style="margin-top:1rem;font-size:0.75rem;color:var(--muted);"></div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+
+  <footer class="footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+    <p>Proyecto de Métodos Numéricos · Informatica · <strong>Bolivia 2026</strong></p>
+    <div style="display:flex; gap:1rem;">
+      <a href="../inicio.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⌂ Introducción</a>
+      <a href="../index.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⊞ Escenarios</a>
+      <a href="../conclusiones.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">Conclusiones →</a>
+    </div>
+  </footer>
+</body>
+</html>

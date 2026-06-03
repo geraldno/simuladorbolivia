@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Métodos Numéricos – Bolivia</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+</head>
+<body class="menu-page">
+
+  <div class="noise"></div>
+
+<nav class="site-nav">
+  <a href="inicio.html">⌂ Introducción</a>
+  <span class="nav-sep">|</span>
+  <span class="nav-current">Escenarios</span>
+  <span class="nav-sep">|</span>
+  <a href="conclusiones.html">Conclusiones →</a>
+</nav>
+
+
+  <header class="hero">
+    <div class="hero-tag">Métodos Numéricos · UMSA 2026</div>
+    <h1 class="hero-title">Simulador<br/><span>Bolivia</span></h1>
+    <p class="hero-sub">Modelos matemáticos aplicados a la crisis de abastecimiento, precios, reservas y dinámica social.</p>
+  </header>
+<div style="padding: 1.5rem var(--page-pad) 0.5rem; position:relative; z-index:1;">
+  <p style="font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted);">
+    7 escenarios interactivos · Módulos 1–5 de métodos numéricos aplicados a la crisis boliviana
+  </p>
+</div>
+
+<div class="KEKE">
+  <main class="scenarios">
+
+    <a href="escenario-a/index.html" class="card card-a">
+      <div class="card-number">A</div>
+      <div class="card-content">
+        <h2>Optimización de Abastecimiento</h2>
+        <p>Sistemas de ecuaciones lineales para modelar redes de distribución de carburante y alimentos.</p>
+        <div class="card-methods">
+          <span>Jacobi</span><span>Gauss-Seidel</span><span>SOR</span><span>LU</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="escenario-b/index.html" class="card card-b">
+      <div class="card-number">B</div>
+      <div class="card-content">
+        <h2>Vaciado de Reservas de Carburante</h2>
+        <p>Ecuaciones diferenciales ordinarias para simular el agotamiento de reservas en plantas de carburantes.</p>
+        <div class="card-methods">
+          <span>Euler</span><span>Heun</span><span>Runge-Kutta 4</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="escenario-c/index.html" class="card card-c">
+      <div class="card-number">C</div>
+      <div class="card-content">
+        <h2>Curva de Precios de Alimentos</h2>
+        <p>Interpolación para reconstruir curvas de precios a partir de datos dispersos del mercado.</p>
+        <div class="card-methods">
+          <span>Lagrange</span><span>Newton</span><span>Splines Cúbicos</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="escenario-d/index.html" class="card card-d">
+      <div class="card-number">D</div>
+      <div class="card-content">
+        <h2>Costo Acumulado y Poder Adquisitivo</h2>
+        <p>Integración numérica para calcular costos acumulados y pérdida del poder adquisitivo familiar.</p>
+        <div class="card-methods">
+          <span>Trapecio</span><span>Simpson 1/3</span><span>Simpson 3/8</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="escenario-e/index.html" class="card card-e">
+      <div class="card-number">E</div>
+      <div class="card-content">
+        <h2>Umbrales Críticos de Abastecimiento</h2>
+        <p>Raíces de ecuaciones para encontrar el punto crítico donde el sistema colapsa económica o logísticamente.</p>
+        <div class="card-methods">
+          <span>Bisección</span><span>Newton-Raphson</span><span>Secante</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="escenario-f/index.html" class="card card-f">
+      <div class="card-number">F</div>
+      <div class="card-content">
+        <h2>Rumores y Pánico en la Red</h2>
+        <p>Análisis de perturbación de sistemas lineales: cómo la desinformación colapsa la distribución.</p>
+        <div class="card-methods">
+          <span>Número de Condición</span><span>Perturbación Lineal</span><span>LU</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="escenario-g/index.html" class="card card-g">
+      <div class="card-number">G</div>
+      <div class="card-content">
+        <h2>Difusión de Opinión y Descontento Social</h2>
+        <p>EDOs acopladas para simular la dinámica social con neutrales, manifestantes y mediadores.</p>
+        <div class="card-methods">
+          <span>Heun</span><span>Runge-Kutta 4</span>
+        </div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </main>
+  </div>
+
+  <footer class="footer" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem;">
+    <p>Proyecto de Métodos Numéricos · Informatica · <strong>Bolivia 2026</strong></p>
+    <div style="display:flex; gap:1rem;">
+      <a href="inicio.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">⌂ Introducción</a>
+      <a href="conclusiones.html" style="font-size:0.7rem; color:var(--muted); text-decoration:none; letter-spacing:0.08em; text-transform:uppercase;">Conclusiones →</a>
+    </div>
+  </footer>
+
+</body>
+</html>
